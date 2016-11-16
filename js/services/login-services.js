@@ -25,6 +25,17 @@ angular.module('login.loginFactory', [])
 		});
 	};
 
+	loginService.ping = function() {
+		return $http({
+			method: 'post',
+			url: 'ping',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID')
+			}
+		});
+	};
+
 	loginService.logout = function() {
 		return $http({
 			method: 'post',
@@ -32,6 +43,16 @@ angular.module('login.loginFactory', [])
 			data: {
 				username: localStorage.getItem('Username'),
 				session_id: localStorage.getItem('SessionID')
+			}
+		});
+	};
+
+	loginService.getNews = function() {
+		return $http({
+			method: 'post',
+			url: 'getNews',
+			data: {
+				username: localStorage.getItem('Username')
 			}
 		});
 	};

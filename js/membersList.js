@@ -1,4 +1,4 @@
-app.controller('membersListCtrl', ['$scope', '$rootScope', 'informService', 'membersService', 
+app.controller('membersListCtrl', ['$scope', '$rootScope', 'informService', 'membersService',
 	function ($scope, $rootScope, informService, membersService) {
 		$scope.itemsExists = true;
 		$scope.membersList = null;

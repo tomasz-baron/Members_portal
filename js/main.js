@@ -1,10 +1,10 @@
-var app=angular.module('main', ['ui.router', 'ui.bootstrap', 'ngMaterial', 'login.loginFactory', 
+var app=angular.module('main', ['ui.router', 'ui.bootstrap', 'ngMaterial', 'login.loginFactory',
 	'main.inform', 'main.membersFactory', 'main.usersFactory']);
 
-app.controller('navigationCtrl', ['$scope', '$rootScope', '$http', '$timeout', 
-	'$location', '$mdSidenav', '$window', 'loginService', 'informService', 
-	function ($scope, $rootScope, $http, $timeout, $location, $mdSidenav, $window, 
-		loginService, informService) {
+app.controller('navigationCtrl', ['$scope', '$rootScope', '$http', '$timeout',
+	'$location', '$mdSidenav', '$window', 'loginService', 'informService', '$interval',
+	function ($scope, $rootScope, $http, $timeout, $location, $mdSidenav, $window,
+		loginService, informService, $interval) {
 		'use strict';
 		$scope.userInfo = '';
 
@@ -16,6 +16,14 @@ app.controller('navigationCtrl', ['$scope', '$rootScope', '$http', '$timeout',
 			$window.location.href = 'login.html';
 		};
 
+		var ping = function() {
+			loginService.ping()
+			.error(function () {
+				$scope.logout();
+			});
+		};
+		$interval(ping, 200000);
+
 		$scope.logout = function() {
 			loginService.logout()
 			.success(function () {
@@ -25,7 +33,18 @@ app.controller('navigationCtrl', ['$scope', '$rootScope', '$http', '$timeout',
 				clearLocStorageGoLogin();
 			});
 		};
-		
+
+		var showNews = function() {
+			var readNews = localStorage.getItem('ReadNews');
+			localStorage.removeItem('ReadNews');
+			if (readNews === '1') {
+				loginService.getNews()
+				.success(function (data) {
+					informService.showAlert('Nowości w aplikacji', data.content);
+				});
+			}
+		};
+
 		var checkSession = function() {
 			loginService.isUserLogged()
 			.success(function (data) {
@@ -41,6 +60,7 @@ app.controller('navigationCtrl', ['$scope', '$rootScope', '$http', '$timeout',
 		};
 
 		checkSession();
+		showNews();
 
 		$rootScope.$on('edit.profile', function (event, value) {
 			$scope.userInfo = value;
@@ -167,7 +187,7 @@ app.config(function($mdDateLocaleProvider) {
 	$mdDateLocaleProvider.shortMonths = ['Styczeń', 'Luty', 'Marzec', 'Kwiecień',
 	'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik',
 	'Listopad', 'Grudzień'];
-  	$mdDateLocaleProvider.days = ['niedziela', 'poniedziałek', 'wtorek', 'środa', 
+  	$mdDateLocaleProvider.days = ['niedziela', 'poniedziałek', 'wtorek', 'środa',
   	'czwartek', 'piątek', 'sobota'];
   	$mdDateLocaleProvider.shortDays = ['niedz', 'pon', 'wt', 'śr', 'czw', 'pt', 'sob'];
   	$mdDateLocaleProvider.firstDayOfWeek = 1;

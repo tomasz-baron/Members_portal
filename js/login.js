@@ -15,6 +15,7 @@ var myApp=angular.module('login', ['login.loginFactory'])
 				localStorage.removeItem('TimeStamp');
 				localStorage.removeItem('SessionID');
 				localStorage.removeItem('UserRole');
+				localStorage.removeItem('ReadNews');
 			});
 		}
 	};
@@ -28,6 +29,7 @@ var myApp=angular.module('login', ['login.loginFactory'])
 			localStorage.setItem('SessionID', data.session);
 			localStorage.setItem('Username', $scope.user.username );
 			localStorage.setItem('UserRole', data.role);
+			localStorage.setItem('ReadNews', data.readNews);
 			$window.location.href = data.url;
 			$scope.errorMessage = '';
 		})
@@ -49,5 +51,3 @@ var myApp=angular.module('login', ['login.loginFactory'])
 		});
 	};
 });
-
-

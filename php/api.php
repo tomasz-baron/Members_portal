@@ -5,8 +5,8 @@ include "db.php";
 
 class API extends REST {
 
-	public $data = "";	
-	
+	public $data = "";
+
 	private $db = NULL;
 	private $mysqli = NULL;
 	public function __construct(){
@@ -39,17 +39,17 @@ function login(){
 	@$username = $request->username;
 	@$pass = $request->password;
 	@$passw = md5($pass);
-	$sql = "SELECT u.id, u.username, u.lastLogin, m.type FROM users u JOIN members m ON u.memberId = m.id WHERE username = '$username' AND u.password = '$passw'";
+	$sql = "SELECT u.id, u.username, u.lastLogin, m.type, u.readNews FROM users u JOIN members m ON u.memberId = m.id WHERE username = '$username' AND u.password = '$passw'";
 	$result = $this->mysqli->query($sql);
 
 	if (mysqli_num_rows($result) > 0) {
-		$row = mysqli_fetch_array($result);			
+		$row = mysqli_fetch_array($result);
 		$datetime = date('Y-m-d H:i:s');
 		$ses = $row["username"].$datetime;
-		$sql = "UPDATE users SET lastLogin = '$datetime', sessionId='".md5($ses)."' WHERE id = " .$row["id"];			
+		$sql = "UPDATE users SET lastLogin = '$datetime', readNews = 0, sessionId='".md5($ses)."' WHERE id = " .$row["id"];
 		$result = $this->mysqli->query($sql);
-		if ($result) {	
-			$this->response($this->json(array('role' => $row['type'], 'session' => md5($ses), 'url' => 'index.html')), 200);
+		if ($result) {
+			$this->response($this->json(array('role' => $row['type'], 'readNews' => $row['readNews'], 'session' => md5($ses), 'url' => 'index.html')), 200);
 		} else {
 			$this->response('', 400);
 		}
@@ -67,10 +67,10 @@ function logout(){
 	$result = $this->mysqli->query($sql);
 
 	if (mysqli_num_rows($result) > 0) {
-		$row = mysqli_fetch_array($result);			
-		$sql = "UPDATE users SET session_id=-1 WHERE id = " .$row["id"];		
+		$row = mysqli_fetch_array($result);
+		$sql = "UPDATE users SET session_id=-1 WHERE id = " .$row["id"];
 		$result = $this->mysqli->query($sql);
-		if ($result) {	
+		if ($result) {
 			$this->response('', 200);
 		} else {
 			$this->response('', 400);
@@ -104,7 +104,7 @@ private function isLoggedAsAdmin($request) {
 	@$session_id = $request->session_id;
 	@$username = $request->username;
 	$sql = "SELECT u.id, u.lastLogin
-		FROM users u JOIN members m ON u.memberId = m.id 
+		FROM users u JOIN members m ON u.memberId = m.id
 		WHERE u.username = '$username' AND u.sessionId='$session_id' AND m.type='Z'";
 	$result = $this->mysqli->query($sql);
 	if (mysqli_num_rows($result) > 0) {
@@ -140,6 +140,29 @@ private function isLogged($request) {
 	}
 }
 
+function ping() {
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	if ($this->isLogged($request)) {
+		$this->response('',200);
+	}
+}
+
+function getNews() {
+	@$username = $request->username;
+	@$old = $request->old;
+	$sql = "SELECT newsDate, content
+		FROM news
+		ORDER BY id DESC LIMIT 1";
+	$result = $this->mysqli->query($sql);
+	if (mysqli_num_rows($result) > 0) {
+		$row = mysqli_fetch_array($result);
+		$this->response($this->json(array('newsDate' => $row['newsDate'], 'content' => $row['content'])), 200);
+	} else {
+		$this->response('',204);
+	}
+}
+
 function getMembersList() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
@@ -152,21 +175,21 @@ function getMembersList() {
 								ORDER BY p.expirationDate DESC
 								LIMIT 1
 								) as 'expirationDate'
-			FROM members m 
+			FROM members m
 			WHERE m.old = $old AND m.id > 0
 			ORDER BY m.lastName ASC";
 		$result = $this->mysqli->query($sql);
 		if (mysqli_num_rows($result) > 0) {
-			while($row = mysqli_fetch_assoc($result)) {					
+			while($row = mysqli_fetch_assoc($result)) {
 				$toReturn[] = array('id' => $row["id"],
 					'lastName' => $row["lastName"],
-					'firstName' => $row["firstName"], 
-					'phone' => $row["phone"], 
-					'privateEmail' => $row["privateEmail"], 
-					'birthDate' => $row["birthDate"], 
-					'cardNumber' => $row["cardNumber"], 
-					'declaration' => $row["declaration"], 
-					'aegeeEmail' => $row["aegeeEmail"], 
+					'firstName' => $row["firstName"],
+					'phone' => $row["phone"],
+					'privateEmail' => $row["privateEmail"],
+					'birthDate' => $row["birthDate"],
+					'cardNumber' => $row["cardNumber"],
+					'declaration' => $row["declaration"],
+					'aegeeEmail' => $row["aegeeEmail"],
 					'connectedToList' => $row["connectedToList"],
 					'expirationDate' => $row["expirationDate"],
 					'type' => $row["type"]
@@ -191,7 +214,7 @@ function getMembersShortList() {
 			ORDER BY m.lastName ASC";
 		$result = $this->mysqli->query($sql);
 		if (mysqli_num_rows($result) > 0) {
-			while($row = mysqli_fetch_assoc($result)) {					
+			while($row = mysqli_fetch_assoc($result)) {
 				$toReturn[] = array('id' => $row["id"],
 					'lastName' => $row["lastName"],
 					'firstName' => $row["firstName"]
@@ -279,12 +302,12 @@ function getMentors() {
 	if ($this->isLogged($request)) {
 		$toReturn = array();
 		$sql = "SELECT m.id, CONCAT(m.firstName, ' ', m.lastName) AS 'name'
-			FROM members m 
+			FROM members m
 			WHERE m.old = 0 AND m.mentorId = 0
 			ORDER BY m.lastName ASC";
 		$result = $this->mysqli->query($sql);
 		if (mysqli_num_rows($result) > 0) {
-			while($row = mysqli_fetch_assoc($result)) {					
+			while($row = mysqli_fetch_assoc($result)) {
 				$toReturn[] = array('id' => $row["id"],
 					'name' => $row["name"]
 					);
@@ -326,7 +349,7 @@ function saveMember() {
 		if (!isset($type)) {
 			$type = 0;
 		}
-		if($firstName != null && strlen($firstName) < 255 && 
+		if($firstName != null && strlen($firstName) < 255 &&
 			$lastName != null && strlen($lastName) < 255 &&
 			$accessionDate != null &&
 			$phone != null && preg_match($phoneRegex, $phone) &&
@@ -335,13 +358,13 @@ function saveMember() {
 			$cardNumber != null && strlen($cardNumber) < 20 && preg_match($cardNumberRegex, $cardNumber) &&
 			$mentorId != null) {
 			$sql = "INSERT INTO members (firstName, lastName, accessionDate,
-				phone, privateEmail, aegeeEmail, birthDate, cardNumber, 
-				declaration, connectedToList, mentorId, type, old) 
+				phone, privateEmail, aegeeEmail, birthDate, cardNumber,
+				declaration, connectedToList, mentorId, type, old)
 				VALUES ('$firstName', '$lastName', '"
 					.$accessionDate->format('Y-m-d').
 					"', '$phone', '$privateEmail', $aegeeEmail, '"
 					.$birthDate->format('Y-m-d').
-					"', '$cardNumber', $declaration, $connectedToList, 
+					"', '$cardNumber', $declaration, $connectedToList,
 					$mentorId, '$type', 0)";
 				$result = $this->mysqli->query($sql);
 			if ($result) {
@@ -386,8 +409,8 @@ function changeMember() {
 		if (!isset($type)) {
 			$type = 0;
 		}
-		if($id != null && 
-			$firstName != null && strlen($firstName) < 255 && 
+		if($id != null &&
+			$firstName != null && strlen($firstName) < 255 &&
 			$lastName != null && strlen($lastName) < 255 &&
 			$accessionDate != null &&
 			$phone != null && preg_match($phoneRegex, $phone) &&
@@ -395,7 +418,7 @@ function changeMember() {
 			$birthDate != null &&
 			$cardNumber != null && strlen($cardNumber) < 20 && preg_match($cardNumberRegex, $cardNumber) &&
 			$mentorId != null) {
-			$sql = "UPDATE members SET 
+			$sql = "UPDATE members SET
 						firstName = '$firstName',
 						lastName = '$lastName',
 						accessionDate = '".$accessionDate->format('Y-m-d')."',
@@ -432,10 +455,10 @@ function getUsersList() {
 			ORDER BY m.lastName ASC";
 		$result = $this->mysqli->query($sql);
 		if (mysqli_num_rows($result) > 0) {
-			while($row = mysqli_fetch_assoc($result)) {					
+			while($row = mysqli_fetch_assoc($result)) {
 				$toReturn[] = array('id' => $row["id"],
 					'lastName' => $row["lastName"],
-					'firstName' => $row["firstName"], 
+					'firstName' => $row["firstName"],
 					'privateEmail' => $row["privateEmail"],
 					'username' => $row["username"],
 					'lastLogin' => $row["lastLogin"],
@@ -455,8 +478,8 @@ function getUserProfile() {
 	if ($this->isLogged($request)) {
 		@$session_id = $request->session_id;
 		@$username = $request->username;
-		$sql = "SELECT u.id, u.username, m.firstName, m.lastName, m.privateEmail 
-				FROM users u JOIN members m ON u.memberId = m.id 
+		$sql = "SELECT u.id, u.username, m.firstName, m.lastName, m.privateEmail
+				FROM users u JOIN members m ON u.memberId = m.id
 				WHERE username = '$username' AND sessionId = '$session_id'";
 		$result = $this->mysqli->query($sql);
 		if (mysqli_num_rows($result) > 0) {
@@ -491,7 +514,7 @@ function setUserProfile() {
 				}
 			}
 		}
-		
+
 		@$password = $request->password;
 		if (!isset($password) || strlen($password) < 5) {
 			$this->response($this->json(array('code' => 'password')), 306);
@@ -516,14 +539,14 @@ function setNewUser() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLoggedAsAdmin($request)) {
-		$valid = true;	
+		$valid = true;
 
 		@$username = $request->_username;
 		if (!isset($username) || strlen($username) < 5) {
 			$this->response($this->json(array('code' => 'username')), 306);
 			$valid = false;
 		}
-		
+
 		@$password = $request->password;
 		if (!isset($password) || strlen($password) < 5) {
 			$this->response($this->json(array('code' => 'password')), 306);
@@ -539,7 +562,7 @@ function setNewUser() {
 		}
 
 		if ($valid) {
-			$sql = "INSERT INTO users (username, password, memberId) 
+			$sql = "INSERT INTO users (username, password, memberId)
 				VALUES ('$username', '$password', $memberId)";
 			$result = $this->mysqli->query($sql);
 			if ($result) {
@@ -555,14 +578,14 @@ function setNewPassword() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLoggedAsAdmin($request)) {
-		$valid = true;	
+		$valid = true;
 
 		@$memberId = $request->memberId;
 		if (!isset($memberId)) {
 			$this->response($this->json(array('code' => 'memberId')), 306);
 			$valid = false;
 		}
-		
+
 		@$password = $request->password;
 		if (!isset($password) || strlen($password) < 5) {
 			$this->response($this->json(array('code' => 'password')), 306);
@@ -613,7 +636,7 @@ function getPaymentsForMember() {
 				ORDER BY paymentDate DESC";
 		$result = $this->mysqli->query($sql);
 		if (mysqli_num_rows($result) > 0) {
-			while($row = mysqli_fetch_assoc($result)) {					
+			while($row = mysqli_fetch_assoc($result)) {
 				$toReturn[] = array('id' => $row["id"], 'amount' => $row["amount"], 'paymentDate' => $row["paymentDate"], 'expirationDate' => $row["expirationDate"], 'type' => $row["type"]);
 			}
 			$this->response($this->json($toReturn), 200);
@@ -649,14 +672,14 @@ function setNewPayment() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLoggedAsAdmin($request)) {
-		$valid = true;	
+		$valid = true;
 
 		@$memberId = $request->memberId;
 		if (!isset($memberId)) {
 			$this->response($this->json(array('code' => 'memberId')), 306);
 			$valid = false;
 		}
-		
+
 		@$paymentDate = $request->paymentDate;
 		if (!isset($paymentDate)) {
 			$this->response($this->json(array('code' => 'paymentDate')), 306);
@@ -689,7 +712,7 @@ function setNewPayment() {
 
 		@$session_id = $request->session_id;
 		@$username = $request->username;
-		$sql = "SELECT m.id FROM users u JOIN members m ON u.memberId = m.id 
+		$sql = "SELECT m.id FROM users u JOIN members m ON u.memberId = m.id
 			WHERE u.username = '$username' AND u.sessionId='$session_id'";
 		$result = $this->mysqli->query($sql);
 		if(mysqli_num_rows($result) > 0) {
@@ -697,7 +720,7 @@ function setNewPayment() {
 			if ($valid) {
 				$auditCD = date('Y-m-d H:i:s');
 				$auditCU = $row['id'];
-				$sql = "INSERT INTO payments (memberId, amount, paymentDate, expirationDate, type, auditCD, auditCU) 
+				$sql = "INSERT INTO payments (memberId, amount, paymentDate, expirationDate, type, auditCD, auditCU)
 				VALUES ($memberId, $amount, '" . $paymentDate->format('Y-m-d') . "', '" . $expirationDate->format('Y-m-d') . "', $type, '$auditCD', $auditCU)";
 				$result = $this->mysqli->query($sql);
 				if ($result) {
