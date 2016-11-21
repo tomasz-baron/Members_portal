@@ -24,3 +24,7 @@ ALTER TABLE `payments` ADD CONSTRAINT `payments_ibfk_1` FOREIGN KEY (memberId) R
 ALTER TABLE `payments` CHANGE `date` `paymentDate` DATE NOT NULL COMMENT 'Data płatności składki';
 ALTER TABLE `payments` CHANGE `year` `year` YEAR(4) NULL;
 ALTER TABLE `payments` CHANGE `auditCD` `auditCD` DATETIME NOT NULL COMMENT 'Data wpisu do bazy';
+// 21-11-2016
+ALTER TABLE `users` ADD `readNews` BOOLEAN NOT NULL DEFAULT FALSE AFTER `memberId`;
+UPDATE `users` SET readNews = 1;
+INSERT INTO `news` (content, newsDate) VALUES ('Możliwość zaznaczenia wielu wierszy gestem longpress -> umożliwienie wprowadzenia składki dla wielu członków z poziomu jednej formatki.', '2016-11-21');

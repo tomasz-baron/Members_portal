@@ -33,7 +33,7 @@ angular.module('main.membersFactory', [])
 			data: {
 				username: localStorage.getItem('Username'),
 				session_id: localStorage.getItem('SessionID'),
-				member_id: member.id,
+				memberId: member.id,
 				declaration: member.declaration
 			}
 		});
@@ -46,7 +46,7 @@ angular.module('main.membersFactory', [])
 			data: {
 				username: localStorage.getItem('Username'),
 				session_id: localStorage.getItem('SessionID'),
-				member_id: member.id,
+				memberId: member.id,
 				aegeeEmail: member.aegeeEmail
 			}
 		});
@@ -59,7 +59,7 @@ angular.module('main.membersFactory', [])
 			data: {
 				username: localStorage.getItem('Username'),
 				session_id: localStorage.getItem('SessionID'),
-				member_id: member.id,
+				memberId: member.id,
 				connectedToList: member.connectedToList
 			}
 		});
@@ -130,7 +130,7 @@ angular.module('main.membersFactory', [])
 			data: {
 				username: localStorage.getItem('Username'),
 				session_id: localStorage.getItem('SessionID'),
-				member_id: memberId
+				memberId: memberId
 			}
 		});
 	};
@@ -175,6 +175,65 @@ angular.module('main.membersFactory', [])
 				expirationDates: payment.expirationDates,
 				type: payment.type,
 				amount: payment.amount
+			}
+		});
+	};
+
+	membersService.moveToOld = function(memberId) {
+		return $http({
+			method: 'post',
+			url: 'moveToOld',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID'),
+				memberId: memberId
+			}
+		});
+	};
+
+	membersService.moveToCurrent = function(memberId) {
+		return $http({
+			method: 'post',
+			url: 'moveToCurrent',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID'),
+				memberId: memberId
+			}
+		});
+	};
+
+	membersService.deleteMember = function(memberId) {
+		return $http({
+			method: 'post',
+			url: 'deleteMember',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID'),
+				memberId: memberId
+			}
+		});
+	};
+
+	membersService.getStatistics = function() {
+		return $http({
+			method: 'post',
+			url: 'getStatistics',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID')
+			}
+		});
+	};
+
+	membersService.getReportData = function(onlyWithPaidContribution) {
+		return $http({
+			method: 'post',
+			url: 'getReportData',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID'),
+				onlyWithPaidContribution: onlyWithPaidContribution
 			}
 		});
 	};

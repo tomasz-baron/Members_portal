@@ -32,7 +32,7 @@
 		</tr>
 	</tbody>
 </table>
-<div class="lock-size" layout="row" layout-align="center center" ng-show="keys(selectedItem).length">
+<div class="lock-size" layout="row" layout-align="center center" ng-show="!old && keys(selectedItem).length">
 	<md-fab-speed-dial ng-click="showPaymentDialog()" class="md-fab-bottom-right">
 		<md-fab-trigger>
 			<md-button aria-label="menu" class="md-fab">

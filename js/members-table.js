@@ -56,6 +56,7 @@ angular.module('main').directive('membersTable', function() {
 			};
 
 			$scope.toggleItem = function(item) {
+				if ($scope.old) return;
 				if ($scope.selectedItem[item.id]) {
 					delete $scope.selectedItem[item.id];
 					paymentItems.remove(item);

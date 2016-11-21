@@ -160,6 +160,13 @@ app.config(function($stateProvider, $urlRouterProvider) {
 			'rightView': { templateUrl: 'include/paymentNew.html' }
 		}
 	})
+	.state('memberEdit', {
+		url: '/memberEdit?id',
+		views: {
+			'contentView': { templateUrl: 'include/memberEdit.html' },
+			'rightView': { templateUrl: 'include/empty.html' }
+		}
+	})
 	.state('oldMembersList', {
 		url: '/oldMembersList',
 		views: {
@@ -167,10 +174,17 @@ app.config(function($stateProvider, $urlRouterProvider) {
 			'rightView': { templateUrl: 'include/empty.html' }
 		}
 	})
-	.state('memberEdit', {
-		url: '/memberEdit?id',
+	.state('reports', {
+		url: '/reports',
 		views: {
-			'contentView': { templateUrl: 'include/memberEdit.html' },
+			'contentView': { templateUrl: 'include/reports.html' },
+			'rightView': { templateUrl: 'include/empty.html' }
+		}
+	})
+	.state('statistics', {
+		url: '/statistics',
+		views: {
+			'contentView': { templateUrl: 'include/statistics.html' },
 			'rightView': { templateUrl: 'include/empty.html' }
 		}
 	})
