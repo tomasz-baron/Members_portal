@@ -51,7 +51,7 @@ angular.module('main.membersFactory', [])
 			}
 		});
 	};
-	
+
 	membersService.setConnectedToList = function(member) {
 		return $http({
 			method: 'post',
@@ -158,6 +158,22 @@ angular.module('main.membersFactory', [])
 				paymentDate: payment.paymentDate,
 				type: payment.type,
 				expirationDate: payment.expirationDate,
+				amount: payment.amount
+			}
+		});
+	};
+
+	membersService.setNewPayments = function(payment) {
+		return $http({
+			method: 'post',
+			url: 'setNewPayments',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID'),
+				memberIds: payment.memberIds,
+				paymentDates: payment.paymentDates,
+				expirationDates: payment.expirationDates,
+				type: payment.type,
 				amount: payment.amount
 			}
 		});

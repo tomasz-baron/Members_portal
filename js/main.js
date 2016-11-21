@@ -1,7 +1,17 @@
 var app=angular.module('main', ['ui.router', 'ui.bootstrap', 'ngMaterial', 'login.loginFactory',
-	'main.inform', 'main.membersFactory', 'main.usersFactory']);
+	'main.inform', 'main.membersFactory', 'main.usersFactory', 'main.paymentItems', 'hmTouchEvents']);
 
-app.controller('navigationCtrl', ['$scope', '$rootScope', '$http', '$timeout',
+app
+.constant("PAYMENT_TYPES", {
+        1: 'Semestr 1',
+        2: 'Semestr 2',
+        3: 'Rok'
+})
+.constant("PAYMENT_AMOUNTS", {
+        20: '20,00 zł',
+        40: '40,00 zł'
+})
+.controller('navigationCtrl', ['$scope', '$rootScope', '$http', '$timeout',
 	'$location', '$mdSidenav', '$window', 'loginService', 'informService', '$interval',
 	function ($scope, $rootScope, $http, $timeout, $location, $mdSidenav, $window,
 		loginService, informService, $interval) {
@@ -187,10 +197,16 @@ app.config(function($mdDateLocaleProvider) {
 	$mdDateLocaleProvider.shortMonths = ['Styczeń', 'Luty', 'Marzec', 'Kwiecień',
 	'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik',
 	'Listopad', 'Grudzień'];
-  	$mdDateLocaleProvider.days = ['niedziela', 'poniedziałek', 'wtorek', 'środa',
+  $mdDateLocaleProvider.days = ['niedziela', 'poniedziałek', 'wtorek', 'środa',
   	'czwartek', 'piątek', 'sobota'];
-  	$mdDateLocaleProvider.shortDays = ['niedz', 'pon', 'wt', 'śr', 'czw', 'pt', 'sob'];
-  	$mdDateLocaleProvider.firstDayOfWeek = 1;
-  	$mdDateLocaleProvider.msgCalendar = 'Kalendarz';
-  	$mdDateLocaleProvider.msgOpenCalendar = 'Otwórz kalendarz';
+  $mdDateLocaleProvider.shortDays = ['niedz', 'pon', 'wt', 'śr', 'czw', 'pt', 'sob'];
+  $mdDateLocaleProvider.firstDayOfWeek = 1;
+  $mdDateLocaleProvider.msgCalendar = 'Kalendarz';
+  $mdDateLocaleProvider.msgOpenCalendar = 'Otwórz kalendarz';
+	$mdDateLocaleProvider.firstRenderableDate = new Date(2012, 1, 1);
+	$mdDateLocaleProvider.formatDate = function(date) {
+		moment.locale('pl');
+    var m = moment(date);
+    return m.isValid() ? m.format('ll') : '';
+  };
 });

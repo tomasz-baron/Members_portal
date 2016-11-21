@@ -7,7 +7,9 @@ angular.module('main').directive('membersTable', function() {
 			old: '='
 		},
 		templateUrl : 'include/members-table.html',
-		controller: function($scope, $rootScope, $element, $location, membersService, informService) { 
+		controller: function($scope, $rootScope, $element, $location, membersService, informService, $state, paymentItems) {
+			$scope.selectedItem = {};
+			$scope.keys = Object.keys;
 			$scope.checkExpirationDate = function(member) {
 				if ($scope.old || member.type === 'H') {
 					return false;
@@ -47,6 +49,24 @@ angular.module('main').directive('membersTable', function() {
 						$rootScope.$emit('session.timeout', '');
 					}
 				});
+			};
+
+			$scope.showPaymentDialog = function() {
+			  informService.showPaymentDialog();
+			};
+
+			$scope.toggleItem = function(item) {
+				if ($scope.selectedItem[item.id]) {
+					delete $scope.selectedItem[item.id];
+					paymentItems.remove(item);
+				} else {
+					$scope.selectedItem[item.id]= item;
+					paymentItems.add(item);
+				}
+			};
+
+			$scope.openDetails = function(id) {
+				$state.go('memberDetails', {id: id});
 			};
 
 			$scope.changeConnectedToList = function(member) {

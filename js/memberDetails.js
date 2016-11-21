@@ -1,8 +1,12 @@
-app.controller('memberDetailsCtrl', ['$scope', '$rootScope', '$stateParams', 'informService', 'membersService', 
-	function ($scope, $rootScope, $stateParams, informService, membersService) {
+app.controller('memberDetailsCtrl', ['$scope', '$rootScope', '$state', '$stateParams', 'informService', 'membersService',
+	function ($scope, $rootScope, $state, $stateParams, informService, membersService) {
 
 		$scope.member = null;
 		$scope.memberId = $stateParams.id;
+
+		if (!$scope.memberId) {
+			$state.go('membersList');
+		}
 
 		$scope.types = [
 		{id: 'C', name: 'Członek zwyczajny'},
@@ -25,6 +29,6 @@ app.controller('memberDetailsCtrl', ['$scope', '$rootScope', '$stateParams', 'in
 		$scope.clearForm = function() {
 			$rootScope.$emit('clear.new.payments', $scope.memberId);
 		}
-		
+
 
 	}]);
