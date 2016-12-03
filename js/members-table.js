@@ -66,8 +66,8 @@ angular.module('main').directive('membersTable', function() {
 				}
 			};
 
-			$scope.openDetails = function(id) {
-				$state.go('memberDetails', {id: id});
+			$scope.openDetails = function(member) {
+				$state.go('memberDetails', {id: member.id});
 			};
 
 			$scope.changeConnectedToList = function(member) {

@@ -12,7 +12,7 @@
 		<th>Podłączenie do listy</th>
 	</thead>
 	<tbody>
-		<tr ng-repeat="member in list | filter:query as results" hm-press="toggleItem(member);" hm-tap="openDetails(member.id);" uib-tooltip="{{member.lastName + ' ' + member.firstName + ' - data ważności składki: ' + member.expirationDate}}" tooltip-placement='top' ng-class="{'info': selectedItem[member.id], 'danger': checkExpirationDate(member) && !selectedItem[member.id]}">
+		<tr ng-repeat="member in list | filter:query as results" hm-press="toggleItem(member);" hm-tap="openDetails(member);" uib-tooltip="{{member.lastName + ' ' + member.firstName + ' - data ważności składki: ' + member.expirationDate}}" tooltip-placement='top' ng-class="{'info': selectedItem[member.id], 'danger': checkExpirationDate(member) && !selectedItem[member.id]}">
 			<th>{{$index + 1}}</th>
 			<td>{{::member.lastName}}</td>
 			<td>{{::member.firstName}}</td>

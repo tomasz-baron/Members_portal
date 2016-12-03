@@ -154,14 +154,20 @@ app.config(function($stateProvider, $urlRouterProvider) {
 		}
 	})
 	.state('memberDetails', {
-		url: '/memberDetails?id',
+		url: '/memberDetails',
+		params: {
+			id: null
+		},
 		views: {
 			'contentView': { templateUrl: 'include/memberDetails.html' },
 			'rightView': { templateUrl: 'include/paymentNew.html' }
 		}
 	})
 	.state('memberEdit', {
-		url: '/memberEdit?id',
+		url: '/memberEdit',
+		params: {
+			member: null
+		},
 		views: {
 			'contentView': { templateUrl: 'include/memberEdit.html' },
 			'rightView': { templateUrl: 'include/empty.html' }
@@ -217,10 +223,11 @@ app.config(function($mdDateLocaleProvider) {
   $mdDateLocaleProvider.firstDayOfWeek = 1;
   $mdDateLocaleProvider.msgCalendar = 'Kalendarz';
   $mdDateLocaleProvider.msgOpenCalendar = 'Otwórz kalendarz';
-	$mdDateLocaleProvider.firstRenderableDate = new Date(2012, 1, 1);
 	$mdDateLocaleProvider.formatDate = function(date) {
 		moment.locale('pl');
     var m = moment(date);
-    return m.isValid() ? m.format('ll') : '';
+		moment.tz.add('Europe/Warsaw|CET|-10|1o00|17e5');
+		moment.tz.link("Europe/Warsaw");
+    return m.isValid() ? m.tz('Europe/Warsaw').format('ll') : '';
   };
 });

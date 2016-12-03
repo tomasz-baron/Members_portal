@@ -1,12 +1,17 @@
 function memberEditController($scope, $rootScope, $stateParams, $state, informService, membersService) {
-	$scope.member = {};
-	$scope.memberId = $stateParams.id;
+	$scope.member = $stateParams.member;
 	$scope.mentors = null;
-	
+	if ($scope.member) {
+		$scope.member.birthDate = new Date($scope.member.birthDate);
+		$scope.member.accessionDate = new Date($scope.member.accessionDate);
+	} else {
+		$scope.member = {};
+	}
+
 	var phoneRegex = new RegExp('[0-9]{9}');
 	var privateEmailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 	var cardNumberRegex = new RegExp('[a-z0-9]{6}-[a-z0-9]{6}', 'i');
-	
+
 	$scope.types = [
 	{id: 'C', name: 'Członek zwyczajny'},
 	{id: 'Z', name: 'Zarząd'},
@@ -20,34 +25,17 @@ function memberEditController($scope, $rootScope, $stateParams, $state, informSe
 			return false;
 		} else if (!phoneRegex.test($scope.member.phone)){
 			informService.showAlert('Błąd', 'Numer telefonu jest niepoprawny');
-			return false;		
+			return false;
 		} else if (!privateEmailRegex.test($scope.member.privateEmail)){
 			informService.showAlert('Błąd', 'Adres e-mail jest niepoprawny');
-			return false;		
+			return false;
 		}  else if (!cardNumberRegex.test($scope.member.cardNumber)){
 			informService.showAlert('Błąd', 'Numer karty członkowskiej jest niepoprawny');
-			return false;		
+			return false;
 		} else {
 			return true;
 		}
 	};
-
-	var getMembersDetails = function() {
-		membersService.getMemberDetails($scope.memberId)
-		.success(function (data) {
-			$scope.member = data;
-			$scope.member.birthDate = new Date(data.birthDate);
-			$scope.member.accessionDate = new Date(data.accessionDate);
-		})
-		.error(function () {
-			informService.showSimpleToast('Błąd pobrania szczegółów członka');
-		});
-	};
-
-	if (angular.isDefined($scope.memberId)) {
-		getMembersDetails();
-	}
-
 
 	$scope.saveMember = function(form) {
 		if (validate(form)) {

@@ -74,5 +74,5 @@ app.controller('memberDetailsCtrl', ['$scope', '$rootScope', '$state', '$statePa
 					$rootScope.$emit('session.timeout', '');
 				}
 			});
-		};	
+		};
 	}]);
