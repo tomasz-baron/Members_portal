@@ -70,18 +70,6 @@ angular.module('main').directive('membersTable', function() {
 				$state.go('memberDetails', {id: member.id});
 			};
 
-			$scope.changeConnectedToList = function(member) {
-				membersService.setConnectedToList(member)
-				.success(function () {
-					informService.showSimpleToast('Zmiana została zapisana');
-				})
-				.error(function (data, status) {
-					informService.showSimpleToast('Błąd zapisu');
-					if (status === 401) {
-						$rootScope.$emit('session.timeout', '');
-					}
-				});
-			};
 		}
 	}
 });

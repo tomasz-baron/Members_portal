@@ -52,19 +52,6 @@ angular.module('main.membersFactory', [])
 		});
 	};
 
-	membersService.setConnectedToList = function(member) {
-		return $http({
-			method: 'post',
-			url: 'setConnectedToList',
-			data: {
-				username: localStorage.getItem('Username'),
-				session_id: localStorage.getItem('SessionID'),
-				memberId: member.id,
-				connectedToList: member.connectedToList
-			}
-		});
-	};
-
 	membersService.getMentors = function() {
 		return $http({
 			method: 'post',
@@ -92,7 +79,6 @@ angular.module('main.membersFactory', [])
 				birthDate: member.birthDate,
 				cardNumber: member.cardNumber,
 				declaration: member.declaration,
-				connectedToList: member.connectedToList,
 				mentorId: member.mentorId,
 				type: member.type
 			}
@@ -116,7 +102,6 @@ angular.module('main.membersFactory', [])
 				birthDate: member.birthDate,
 				cardNumber: member.cardNumber,
 				declaration: member.declaration,
-				connectedToList: member.connectedToList,
 				mentorId: member.mentorId,
 				type: member.type
 			}

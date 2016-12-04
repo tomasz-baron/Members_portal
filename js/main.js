@@ -3,13 +3,17 @@ var app=angular.module('main', ['ui.router', 'ui.bootstrap', 'ngMaterial', 'logi
 
 app
 .constant("PAYMENT_TYPES", {
-        1: 'Semestr 1',
-        2: 'Semestr 2',
-        3: 'Rok'
+    1: 'Semestr 1',
+    2: 'Semestr 2',
+    3: 'Rok'
 })
 .constant("PAYMENT_AMOUNTS", {
-        20: '20,00 zł',
-        40: '40,00 zł'
+    20: '20,00 zł',
+    40: '40,00 zł'
+})
+.constant("BOOLEAN", {
+	0: 'Nie',
+	1: 'Tak'
 })
 .controller('navigationCtrl', ['$scope', '$rootScope', '$http', '$timeout',
 	'$location', '$mdSidenav', '$window', 'loginService', 'informService', '$interval',
