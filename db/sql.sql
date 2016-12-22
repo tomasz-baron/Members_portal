@@ -47,6 +47,6 @@ ALTER TABLE `logs`
   ADD CONSTRAINT `logs_ibfk_1` FOREIGN KEY (`memberId`) REFERENCES `members` (`id`);
 
 ALTER TABLE `logs`
-  ADD CONSTRAINT `logs_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `users` (`id`);  
+  ADD CONSTRAINT `logs_ibfk_2` FOREIGN KEY (`memberUserId`) REFERENCES `users` (`id`);  
 
 ALTER TABLE `logs` CHANGE `id` `id` INT(10) NOT NULL AUTO_INCREMENT COMMENT 'id loginu';
