@@ -1,19 +1,10 @@
-app.controller('paymentNewCtrl',['$scope', '$rootScope', 'membersService', 'informService',
-	function ($scope, $rootScope, membersService,  informService) {
+app.controller('paymentNewCtrl',['$scope', '$rootScope', 'membersService', 'informService', 'PAYMENT_TYPES', 'PAYMENT_AMOUNTS',
+	function ($scope, $rootScope, membersService,  informService, PAYMENT_TYPES, PAYMENT_AMOUNTS) {
 		'use strict';
 		$scope.payment = {};
 
-		$scope.paymentTypes = [
-			{'id': 1, 'name': 'Semestr 1'},
-			{'id': 2, 'name': 'Semestr 2'},
-			{'id': 3, 'name': 'Rok'}
-		];
-
-		$scope.paymentAmounts = [
-			{'id': 20, 'name': '20,00 zł'},
-			{'id': 40, 'name': '40,00 zł'}
-		];
-
+		$scope.paymentTypes = PAYMENT_TYPES;
+		$scope.paymentAmounts = PAYMENT_AMOUNTS;
 
 		$rootScope.$on('clear.new.payments', function (event, value) {
 			$scope.reset($scope.paymentNewForm);
@@ -23,13 +14,13 @@ app.controller('paymentNewCtrl',['$scope', '$rootScope', 'membersService', 'info
 		var setExpirationDate = function() {
 			var currentDate = new Date();
 			switch ($scope.payment.type) {
-				case 1 :
+				case '1' :
 					$scope.payment.expirationDate = new Date((currentDate.getFullYear() + 1) + '-01-31');
 					break;
-				case 2 : 
+				case '2' :
 					$scope.payment.expirationDate = new Date(currentDate.getFullYear() + '-09-31');
 					break
-				case 3 : 
+				case '3' :
 					$scope.payment.expirationDate = new Date((currentDate.getFullYear() + 1) + '-09-31');
 					break;
 			}
@@ -37,11 +28,11 @@ app.controller('paymentNewCtrl',['$scope', '$rootScope', 'membersService', 'info
 
 		var setAmount = function() {
 			switch ($scope.payment.type) {
-				case 1 :
-				case 2 : 
+				case '1' :
+				case '2' :
 					$scope.payment.amount = 20;
 					break
-				case 3 : 
+				case '3' :
 					$scope.payment.amount = 40;
 					break;
 			}

@@ -1,0 +1,37 @@
+<md-dialog class="payment-dialog">
+  <md-toolbar>
+     <div class="md-toolbar-tools">
+       <h2>Szybkie wprowadzanie składek</h2>
+       <span flex></span>
+       <md-button class="md-icon-button" ng-click="cancel()">
+         <md-icon md-font-set="material-icons">clear</md-icon>
+ 			</md-button>
+       </md-button>
+     </div>
+   </md-toolbar>
+  <md-dialog-content class="content">
+    <div class="row row-fluid" ng-repeat="(key, member) in items">
+      <label>{{member.lastName}} {{member.firstName}}</label>
+      <md-datepicker ng-model="member.expirationDate" md-placeholder="Data ważności" required class="expiration-date"></md-datepicker>
+      <md-datepicker ng-model="member.paymentDate" md-placeholder="Data płatności" required class="payment-date"></md-datepicker>
+    </div>
+    <div class="info-row">
+      <md-input-container class="type-container">
+				<label>Typ składki</label>
+				<md-select ng-model="payment.type" ng-value="null">
+					<md-option ng-value="key" ng-repeat="(key, value) in paymentTypes">{{value}}</md-option>
+				</md-select>
+			</md-input-container>
+      <md-input-container class="amount-container">
+        <label>Kwota składki</label>
+        <md-select ng-model="payment.amount" ng-value="null">
+          <md-option ng-value="key" ng-repeat="(key, value) in paymentAmounts">{{value}}</md-option>
+        </md-select>
+      </md-input-container>
+    </div>
+  </md-dialog-content>
+  <md-dialog-actions>
+    <md-button ng-click="cancel()" class="md-primary">Anuluj</md-button>
+    <md-button ng-click="save()" class="md-primary">Zapisz składki</md-button>
+  </md-dialog-actions>
+</md-dialog>

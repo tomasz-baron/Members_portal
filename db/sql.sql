@@ -24,3 +24,29 @@ ALTER TABLE `payments` ADD CONSTRAINT `payments_ibfk_1` FOREIGN KEY (memberId) R
 ALTER TABLE `payments` CHANGE `date` `paymentDate` DATE NOT NULL COMMENT 'Data płatności składki';
 ALTER TABLE `payments` CHANGE `year` `year` YEAR(4) NULL;
 ALTER TABLE `payments` CHANGE `auditCD` `auditCD` DATETIME NOT NULL COMMENT 'Data wpisu do bazy';
+// 21-11-2016
+ALTER TABLE `users` ADD `readNews` BOOLEAN NOT NULL DEFAULT FALSE AFTER `memberId`;
+UPDATE `users` SET readNews = 1;
+INSERT INTO `news` (content, newsDate) VALUES ('Możliwość zaznaczenia wielu wierszy gestem longpress -> umożliwienie wprowadzenia składki dla wielu członków z poziomu jednej formatki.', '2016-11-21');
+
+// 03-12-2016
+CREATE TABLE `logs` (
+  `id` int(10) NOT NULL COMMENT 'id',
+  `memberId` int(10) NOT NULL COMMENT 'id czlonka, dla ktorego przeprowadzono zmiane',
+  `memberUserId` int(10) NOT NULL COMMENT 'id usera, ktory przeprowadzil zmiane',
+  `ldate` datetime NOT NULL COMMENT 'data dokonania zmian',
+  `type` int(2) NOT NULL COMMENT 'typ zmiany 1 - dodanie czlonka, 2 - dodanie składki, 3 - utworzenie uzytkownika, 4 - przeniesienie do bylych czlonkow, 5 - przywrocenie czlonka'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci COMMENT='Logi aplikacji';
+
+ALTER TABLE `logs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `logs_ibfk_1` (`memberId`),
+  ADD KEY `logs_ibfk_2` (`memberUserId`);
+
+ALTER TABLE `logs`
+  ADD CONSTRAINT `logs_ibfk_1` FOREIGN KEY (`memberId`) REFERENCES `members` (`id`);
+
+ALTER TABLE `logs`
+  ADD CONSTRAINT `logs_ibfk_2` FOREIGN KEY (`memberUserId`) REFERENCES `users` (`id`);  
+
+ALTER TABLE `logs` CHANGE `id` `id` INT(10) NOT NULL AUTO_INCREMENT COMMENT 'id loginu';

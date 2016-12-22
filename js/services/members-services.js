@@ -33,7 +33,7 @@ angular.module('main.membersFactory', [])
 			data: {
 				username: localStorage.getItem('Username'),
 				session_id: localStorage.getItem('SessionID'),
-				member_id: member.id,
+				memberId: member.id,
 				declaration: member.declaration
 			}
 		});
@@ -46,21 +46,8 @@ angular.module('main.membersFactory', [])
 			data: {
 				username: localStorage.getItem('Username'),
 				session_id: localStorage.getItem('SessionID'),
-				member_id: member.id,
+				memberId: member.id,
 				aegeeEmail: member.aegeeEmail
-			}
-		});
-	};
-	
-	membersService.setConnectedToList = function(member) {
-		return $http({
-			method: 'post',
-			url: 'setConnectedToList',
-			data: {
-				username: localStorage.getItem('Username'),
-				session_id: localStorage.getItem('SessionID'),
-				member_id: member.id,
-				connectedToList: member.connectedToList
 			}
 		});
 	};
@@ -92,7 +79,6 @@ angular.module('main.membersFactory', [])
 				birthDate: member.birthDate,
 				cardNumber: member.cardNumber,
 				declaration: member.declaration,
-				connectedToList: member.connectedToList,
 				mentorId: member.mentorId,
 				type: member.type
 			}
@@ -116,7 +102,6 @@ angular.module('main.membersFactory', [])
 				birthDate: member.birthDate,
 				cardNumber: member.cardNumber,
 				declaration: member.declaration,
-				connectedToList: member.connectedToList,
 				mentorId: member.mentorId,
 				type: member.type
 			}
@@ -130,7 +115,7 @@ angular.module('main.membersFactory', [])
 			data: {
 				username: localStorage.getItem('Username'),
 				session_id: localStorage.getItem('SessionID'),
-				member_id: memberId
+				memberId: memberId
 			}
 		});
 	};
@@ -159,6 +144,81 @@ angular.module('main.membersFactory', [])
 				type: payment.type,
 				expirationDate: payment.expirationDate,
 				amount: payment.amount
+			}
+		});
+	};
+
+	membersService.setNewPayments = function(payment) {
+		return $http({
+			method: 'post',
+			url: 'setNewPayments',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID'),
+				memberIds: payment.memberIds,
+				paymentDates: payment.paymentDates,
+				expirationDates: payment.expirationDates,
+				type: payment.type,
+				amount: payment.amount
+			}
+		});
+	};
+
+	membersService.moveToOld = function(memberId) {
+		return $http({
+			method: 'post',
+			url: 'moveToOld',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID'),
+				memberId: memberId
+			}
+		});
+	};
+
+	membersService.moveToCurrent = function(memberId) {
+		return $http({
+			method: 'post',
+			url: 'moveToCurrent',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID'),
+				memberId: memberId
+			}
+		});
+	};
+
+	membersService.deleteMember = function(memberId) {
+		return $http({
+			method: 'post',
+			url: 'deleteMember',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID'),
+				memberId: memberId
+			}
+		});
+	};
+
+	membersService.getStatistics = function() {
+		return $http({
+			method: 'post',
+			url: 'getStatistics',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID')
+			}
+		});
+	};
+
+	membersService.getReportData = function(onlyWithPaidContribution) {
+		return $http({
+			method: 'post',
+			url: 'getReportData',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID'),
+				onlyWithPaidContribution: onlyWithPaidContribution
 			}
 		});
 	};

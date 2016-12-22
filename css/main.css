@@ -11,6 +11,10 @@ body, html {
 	padding: 0;
 }
 
+h1, h2, h3, h4, h5, h6, p, div, body {
+	font-family: Lato !important;
+}
+
 body, p, div {
 	font-size: 13px;
 }
@@ -23,7 +27,7 @@ form h4.filled {
 	color: rgba(0, 0, 0, 0.541176);
 	-webkit-transform: translate3d(-10px, -5px, 0) scale(.75);
 	transform: translate3d(-10px, -5px, 0) scale(.75);
-	-webkit-transition-duration: 0.25s; 
+	-webkit-transition-duration: 0.25s;
 	transition-duration: 0.25s;
 	padding-left: 0px;
 }
@@ -32,7 +36,7 @@ form h4.filled {
 	margin-bottom: 5px !important;
 }
 
-md-toolbar.md-default-theme:not(.md-menu-toolbar), md-toolbar:not(.md-menu-toolbar), 
+md-toolbar.md-default-theme:not(.md-menu-toolbar), md-toolbar:not(.md-menu-toolbar),
 md-fab-speed-dial.md-fab-bottom-right button,  md-fab-speed-dial.md-fab-bottom-center md-fab-trigger button {
 	background-color: #1468b3!important;
 	color: #fff;
@@ -42,7 +46,49 @@ md-input-container input, md-input-container label, md-input-container md-select
 	font-size: 17px;
 }
 
+.payment-dialog {
+}
 
+.payment-dialog .content {
+	overflow: initial;
+	padding: 25px 40px 10px 40px;
+}
+
+.payment-dialog .content .row {
+	height: 50px;
+}
+
+.payment-dialog .content .info-row {
+	padding-top: 20px;
+}
+
+.payment-dialog .content .info-row .type-container{
+	float: left;
+	width: 45%;
+}
+
+.payment-dialog .content .info-row .amount-container{
+	float: right;
+	width: 45%;
+}
+
+.payment-dialog .content .row label {
+	padding-right: 75px;
+}
+
+.payment-dialog .content .row .payment-date {
+	width: 205px;
+	float: right;
+}
+
+.payment-dialog .content .row .expiration-date {
+	width: 235px;
+	float: right;
+}
+
+.payment-dialog .content .row .expiration-date .md-datepicker-input-container {
+	width: 150px;
+}
 
 .main-menu, .md-sidenav-left {
 	background-color: #1468b3 !important;
@@ -120,7 +166,7 @@ md-content {
 	width: 100%;
 }
 
-.main-menu .md-button:hover, md-toolbar.main-toolbar a.btn:hover, 
+.main-menu .md-button:hover, md-toolbar.main-toolbar a.btn:hover,
 md-toolbar.main-toolbar button.btn:hover, md-fab-speed-dial.md-fab-bottom-right button:hover,
 md-fab-speed-dial.md-fab-bottom-center md-fab-trigger button:hover,
 md-menu-bar md-menu.md-open > button {
@@ -148,7 +194,7 @@ md-menu-bar md-menu.md-open > button {
 }
 
 .main-view .md-toolbar-tools {
-	width: 30%;
+	width: 50%;
 }
 
 .right-view md-toolbar h1.md-toolbar-tools {
@@ -174,17 +220,17 @@ md-toolbar.main-toolbar button.open-menu {
 	width: 65px;
 	font-size: 14px;
 	margin: 0px 10px;
-} 
+}
 
 .md-sidenav-left md-toolbar md-input-container md-select-value {
 	min-width: 45px;
 	font-size: 14px;
 	color: rgba(255,255,255,0.89);
-} 
+}
 
 .md-sidenav-left md-toolbar md-input-container.md-input-focused md-select-value {
 	color: rgba(255,255,255,0.89) !important;
-} 
+}
 
 
 .md-sidenav-left md-toolbar hr {
@@ -227,6 +273,7 @@ md-fab-actions button md-icon {
 
 .members-list-container table {
 	font-size: 14px;
+	margin-bottom: 5px !important;
 }
 
 member-edit-form form md-input-container.list {
@@ -252,10 +299,11 @@ member-edit-form form h4.filled {
 	transform: translate3d(-35px, 5px, 0) scale(.75);
 }
 
-member-edit-form form, 
-.user-profile-container form, 
-.member-details-container form,  
-.member-details-container payments-table div {
+member-edit-form form,
+.user-profile-container form,
+.member-details-container form,
+.member-details-container payments-table div,
+.statistics-container {
 	margin: 10px;
 	padding: 10px;
 }
@@ -313,8 +361,8 @@ md-card.search-container md-input-container {
 	padding-top: 0 !important;
 }
 
-.payment-new-container form md-input-container.md-input-focused label:not(.md-no-float), 
-.payment-new-container form md-input-container.md-input-has-placeholder label:not(.md-no-float), 
+.payment-new-container form md-input-container.md-input-focused label:not(.md-no-float),
+.payment-new-container form md-input-container.md-input-has-placeholder label:not(.md-no-float),
 .payment-new-container form md-input-container.md-input-has-value label:not(.md-no-float) {
 	-webkit-transform: translate3d(20px, 30px, 0) scale(.75);
     transform: translate3d(20px, 30px, 0) scale(.75);
@@ -330,6 +378,22 @@ md-card.search-container md-input-container {
 	font-size: 20px;
 	line-height: 10px;
 	margin-bottom: 20px;
+}
+
+.statistics-container div.title {
+	font-weight: normal;
+	font-size: 17px;
+}
+
+.statistics-container div.content {
+	font-weight: normal;
+	font-size: 20px;
+	line-height: 10px;
+	margin-bottom: 20px;
+}
+
+.statistics-container div {
+	margin-bottom: 10px;
 }
 
 form div.actions-row {

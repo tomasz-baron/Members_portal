@@ -12,7 +12,7 @@ angular.module('main').directive('usersCard', function() {
 			$scope.userRole = localStorage.getItem('UserRole');
 			var isAdmin = function() {
 				if (angular.isDefined($scope.userRole)) {
-					if ($scope.userRole === 'Z') {
+					if ($scope.userRole === 'ADM') {
 						$scope.isAdmin = true;
 					} else {
 						$scope.isAdmin = false;
@@ -24,7 +24,7 @@ angular.module('main').directive('usersCard', function() {
 			isAdmin();
 
 			$scope.removeUser = function(user){
-				if(user.username === $scope.userLogged || $scope.userRole !== 'H') {
+				if(user.username === $scope.userLogged || $scope.userRole !== 'ADM') {
 					informService.showAlert('Błąd', 'Nie można usunąć użytkownika');
 				} else {
 					var msg = 'Czy usunąć użytkownika ' + user.username + '?';

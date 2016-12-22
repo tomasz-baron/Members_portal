@@ -1,10 +1,24 @@
-var app=angular.module('main', ['ui.router', 'ui.bootstrap', 'ngMaterial', 'login.loginFactory', 
-	'main.inform', 'main.membersFactory', 'main.usersFactory']);
+var app=angular.module('main', ['ui.router', 'ui.bootstrap', 'ngMaterial', 'login.loginFactory',
+	'main.inform', 'main.membersFactory', 'main.usersFactory', 'main.paymentItems', 'hmTouchEvents']);
 
-app.controller('navigationCtrl', ['$scope', '$rootScope', '$http', '$timeout', 
-	'$location', '$mdSidenav', '$window', 'loginService', 'informService', 
-	function ($scope, $rootScope, $http, $timeout, $location, $mdSidenav, $window, 
-		loginService, informService) {
+app
+.constant("PAYMENT_TYPES", {
+    1: 'Semestr 1',
+    2: 'Semestr 2',
+    3: 'Rok'
+})
+.constant("PAYMENT_AMOUNTS", {
+    20: '20,00 zł',
+    40: '40,00 zł'
+})
+.constant("BOOLEAN", {
+	0: 'Nie',
+	1: 'Tak'
+})
+.controller('navigationCtrl', ['$scope', '$rootScope', '$http', '$timeout',
+	'$location', '$mdSidenav', '$window', 'loginService', 'informService', '$interval',
+	function ($scope, $rootScope, $http, $timeout, $location, $mdSidenav, $window,
+		loginService, informService, $interval) {
 		'use strict';
 		$scope.userInfo = '';
 
@@ -16,6 +30,14 @@ app.controller('navigationCtrl', ['$scope', '$rootScope', '$http', '$timeout',
 			$window.location.href = 'login.html';
 		};
 
+		var ping = function() {
+			loginService.ping()
+			.error(function () {
+				$scope.logout();
+			});
+		};
+		$interval(ping, 200000);
+
 		$scope.logout = function() {
 			loginService.logout()
 			.success(function () {
@@ -25,7 +47,18 @@ app.controller('navigationCtrl', ['$scope', '$rootScope', '$http', '$timeout',
 				clearLocStorageGoLogin();
 			});
 		};
-		
+
+		var showNews = function() {
+			var readNews = localStorage.getItem('ReadNews');
+			localStorage.removeItem('ReadNews');
+			if (readNews === '1') {
+				loginService.getNews()
+				.success(function (data) {
+					informService.showAlert('Nowości w aplikacji', data.content);
+				});
+			}
+		};
+
 		var checkSession = function() {
 			loginService.isUserLogged()
 			.success(function (data) {
@@ -41,6 +74,7 @@ app.controller('navigationCtrl', ['$scope', '$rootScope', '$http', '$timeout',
 		};
 
 		checkSession();
+		showNews();
 
 		$rootScope.$on('edit.profile', function (event, value) {
 			$scope.userInfo = value;
@@ -124,10 +158,23 @@ app.config(function($stateProvider, $urlRouterProvider) {
 		}
 	})
 	.state('memberDetails', {
-		url: '/memberDetails?id',
+		url: '/memberDetails',
+		params: {
+			id: null
+		},
 		views: {
 			'contentView': { templateUrl: 'include/memberDetails.html' },
 			'rightView': { templateUrl: 'include/paymentNew.html' }
+		}
+	})
+	.state('memberEdit', {
+		url: '/memberEdit',
+		params: {
+			member: null
+		},
+		views: {
+			'contentView': { templateUrl: 'include/memberEdit.html' },
+			'rightView': { templateUrl: 'include/empty.html' }
 		}
 	})
 	.state('oldMembersList', {
@@ -137,10 +184,17 @@ app.config(function($stateProvider, $urlRouterProvider) {
 			'rightView': { templateUrl: 'include/empty.html' }
 		}
 	})
-	.state('memberEdit', {
-		url: '/memberEdit?id',
+	.state('reports', {
+		url: '/reports',
 		views: {
-			'contentView': { templateUrl: 'include/memberEdit.html' },
+			'contentView': { templateUrl: 'include/reports.html' },
+			'rightView': { templateUrl: 'include/empty.html' }
+		}
+	})
+	.state('statistics', {
+		url: '/statistics',
+		views: {
+			'contentView': { templateUrl: 'include/statistics.html' },
 			'rightView': { templateUrl: 'include/empty.html' }
 		}
 	})
@@ -167,10 +221,17 @@ app.config(function($mdDateLocaleProvider) {
 	$mdDateLocaleProvider.shortMonths = ['Styczeń', 'Luty', 'Marzec', 'Kwiecień',
 	'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik',
 	'Listopad', 'Grudzień'];
-  	$mdDateLocaleProvider.days = ['niedziela', 'poniedziałek', 'wtorek', 'środa', 
+  $mdDateLocaleProvider.days = ['niedziela', 'poniedziałek', 'wtorek', 'środa',
   	'czwartek', 'piątek', 'sobota'];
-  	$mdDateLocaleProvider.shortDays = ['niedz', 'pon', 'wt', 'śr', 'czw', 'pt', 'sob'];
-  	$mdDateLocaleProvider.firstDayOfWeek = 1;
-  	$mdDateLocaleProvider.msgCalendar = 'Kalendarz';
-  	$mdDateLocaleProvider.msgOpenCalendar = 'Otwórz kalendarz';
+  $mdDateLocaleProvider.shortDays = ['niedz', 'pon', 'wt', 'śr', 'czw', 'pt', 'sob'];
+  $mdDateLocaleProvider.firstDayOfWeek = 1;
+  $mdDateLocaleProvider.msgCalendar = 'Kalendarz';
+  $mdDateLocaleProvider.msgOpenCalendar = 'Otwórz kalendarz';
+	$mdDateLocaleProvider.formatDate = function(date) {
+		moment.locale('pl');
+    var m = moment(date);
+		moment.tz.add('Europe/Warsaw|CET|-10|1o00|17e5');
+		moment.tz.link("Europe/Warsaw");
+    return m.isValid() ? m.tz('Europe/Warsaw').format('ll') : '';
+  };
 });

@@ -9,10 +9,9 @@
 		<th>Karta członkowska</th>
 		<th>Deklaracja</th>
 		<th>@aegee-gliwice.org</th>
-		<th>Podłączenie do listy</th>
 	</thead>
 	<tbody>
-		<tr ng-repeat="member in list | filter:query as results" uib-tooltip="{{member.lastName + ' ' + member.firstName + ' - data ważności składki: ' + member.expirationDate}}" tooltip-placement='top' ng-class="{'danger': checkExpirationDate(member)}" ui-sref="memberDetails({id: member.id})">
+		<tr ng-repeat="member in list | filter:query as results" hm-press="toggleItem(member);" hm-tap="openDetails(member);" uib-tooltip="{{member.lastName + ' ' + member.firstName + ' - data ważności składki: ' + member.expirationDate}}" tooltip-placement='top' ng-class="{'info': selectedItem[member.id], 'danger': checkExpirationDate(member) && !selectedItem[member.id]}">
 			<th>{{$index + 1}}</th>
 			<td>{{::member.lastName}}</td>
 			<td>{{::member.firstName}}</td>
@@ -26,9 +25,15 @@
 			<td class="col-md-offset-5">
 				<md-checkbox ng-click="$event.stopPropagation()" ng-model="::member.aegeeEmail" ng-true-value="'1'" ng-false-value="'0'" aria-label="Czy członek ma konto mailowe w domenie aegee" ng-change="changeAegeeEmail(member)"></md-checkbox>
 			</td>
-			<td class="col-md-offset-5">
-				<md-checkbox ng-click="$event.stopPropagation()" ng-model="::member.connectedToList" ng-true-value="'1'" ng-false-value="'0'" aria-label="Czy członek jest podłączony do listy mailingowej" ng-change="changeConnectedToList(member)"></md-checkbox>
-			</td>
 		</tr>
 	</tbody>
 </table>
+<div class="lock-size" layout="row" layout-align="center center" ng-show="!old && keys(selectedItem).length">
+	<md-fab-speed-dial ng-click="showPaymentDialog()" class="md-fab-bottom-right">
+		<md-fab-trigger>
+			<md-button aria-label="menu" class="md-fab">
+				<md-icon md-font-set="material-icons">payment</md-icon>
+			</md-button>
+		</md-fab-trigger>
+	</md-fab-speed-dial>
+</div>

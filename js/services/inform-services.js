@@ -1,5 +1,6 @@
 angular.module('main.inform', [])
-.factory('informService', ['$mdDialog', '$mdToast', function($mdDialog, $mdToast) {
+.factory('informService', ['$mdDialog', '$mdToast', 'PAYMENT_TYPES', 'PAYMENT_AMOUNTS',
+ function($mdDialog, $mdToast, PAYMENT_TYPES, PAYMENT_AMOUNTS) {
 	'use strict';
 	var informService={};
 
@@ -15,12 +16,12 @@ angular.module('main.inform', [])
 			);
 	};
 
-	informService.showSimpleToast = function(content) {
+	informService.showSimpleToast = function(content, delay) {
 		$mdToast.show(
 			$mdToast.simple()
 			.textContent(content)
 			.position('bottom right')
-			.hideDelay(3000)
+			.hideDelay(delay || 3000)
 			);
 	};
 
@@ -31,7 +32,16 @@ angular.module('main.inform', [])
 			.ariaLabel(content)
 			.cancel('Anuluj')
 			.ok('Tak');
-			
+
+	};
+
+	informService.showPaymentDialog = function(items) {
+		$mdDialog.show({
+			clickOutsideToClose: true,
+			preserveScope: true,
+			templateUrl: 'include/paymentBatch.html',
+			controller: 'paymentBatchCtrl'
+		});
 	};
 
 	return informService;
