@@ -1,0 +1,13 @@
+{
+  "name": "membersportal",
+  "homepage": "https://github.com/tomasz-baron/Members_portal",
+  "description": "Members portal",
+  "main": "",
+  "license": "MIT",
+  "dependencies": {
+    "angular": "^1.6.0",
+    "angular-material": "^1.1.1",
+    "AngularHammer": "angular-hammerjs#^2.2.0",
+    "angular-ui-bootstrap": "^2.3.1"
+  }
+}
