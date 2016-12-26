@@ -23,32 +23,22 @@
 				<div class="content">{{::member.privateEmail}}</div>
 			</div>
 			<div class="md-block" flex-gt-sm>
-				<div class="title">Numer karty członkowskiej</div>
-				<div class="content">{{::member.cardNumber}}</div>
+				<div class="title">Data urodzenia</div>
+				<div class="content">{{::member.birthDate}}</div>
 			</div>
 		</div>
 		<div layout-gt-sm="row">
 			<div class="md-block" flex-gt-sm>
-				<div class="title">Data urodzenia</div>
-				<div class="content">{{::member.birthDate}}</div>
+				<div class="title">Numer karty członkowskiej</div>
+				<div class="content">{{::member.cardNumber}}</div>
 			</div>
 			<div class="md-block" flex-gt-sm>
 				<div class="title">Data wstąpienia</div>
 				<div class="content">{{::member.accessionDate}}</div>
 			</div>
 			<div class="md-block" flex-gt-sm>
-			</div>
-		</div>
-		<div layout-gt-sm="row">
-			<div class="md-block" flex-gt-sm>
 				<div class="title">Deklaracja</div>
-				<div class="content" ng-if="member.declaration === '1'">Tak</div>
-				<div class="content" ng-if="member.declaration === '0'">Nie</div>
-			</div>
-			<div class="md-block" flex-gt-sm>
-				<div class="title">Adres w domenie aegee-gliwice.org</div>
-				<div class="content" ng-if="member.aegeeEmail === '1'">Tak</div>
-				<div class="content" ng-if="member.aegeeEmail === '0'">Nie</div>
+				<div class="content">{{boolean[member.declaration]}}</div>
 			</div>
 		</div>
 		<div layout-gt-sm="row">
@@ -58,13 +48,11 @@
 			</div>
 			<div class="md-block" flex-gt-sm>
 				<div class="title">Typ członka</div>
-				<div class="content" ng-if="member.type === 'C'">Członek zwyczajny</div>
-				<div class="content" ng-if="member.type === 'Z'">Zarząd</div>
-				<div class="content" ng-if="member.type === 'R'">Komisja Rewizyjna</div>
-				<div class="content" ng-if="member.type === 'K'">Koordynator grupy roboczej</div>
-				<div class="content" ng-if="member.type === 'H'">Członek honorowy</div>
+				<div class="content">{{memberTypes[member.type]}}</div>
 			</div>
 			<div class="md-block" flex-gt-sm>
+				<div class="title">Adres w domenie aegee-gliwice.org</div>
+				<div class="content">{{boolean[member.aegeeEmail]}}</div>
 			</div>
 		</div>
 		<div class="actions-row" ng-show="userRole === 'ADM'" layout="row" layout-align="end center">

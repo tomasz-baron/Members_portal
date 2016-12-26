@@ -15,6 +15,12 @@ app
 	0: 'Nie',
 	1: 'Tak'
 })
+.constant("MEMBER_TYPES", {
+	C: 'Członek zwyczajny',
+	Z: 'Zarząd',
+	K: 'Komisja Rewizyjna',
+	H: 'Członek honorowy'
+})
 .controller('navigationCtrl', ['$scope', '$rootScope', '$http', '$timeout',
 	'$location', '$mdSidenav', '$window', 'loginService', 'informService', '$interval',
 	function ($scope, $rootScope, $http, $timeout, $location, $mdSidenav, $window,
@@ -216,22 +222,19 @@ app.config(function($stateProvider, $urlRouterProvider) {
 
 app.config(function($mdDateLocaleProvider) {
 	$mdDateLocaleProvider.months = ['Styczeń', 'Luty', 'Marzec', 'Kwiecień',
-	'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik',
-	'Listopad', 'Grudzień'];
-	$mdDateLocaleProvider.shortMonths = ['Styczeń', 'Luty', 'Marzec', 'Kwiecień',
-	'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik',
-	'Listopad', 'Grudzień'];
-  $mdDateLocaleProvider.days = ['niedziela', 'poniedziałek', 'wtorek', 'środa',
-  	'czwartek', 'piątek', 'sobota'];
-  $mdDateLocaleProvider.shortDays = ['niedz', 'pon', 'wt', 'śr', 'czw', 'pt', 'sob'];
-  $mdDateLocaleProvider.firstDayOfWeek = 1;
-  $mdDateLocaleProvider.msgCalendar = 'Kalendarz';
-  $mdDateLocaleProvider.msgOpenCalendar = 'Otwórz kalendarz';
+		'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik',
+		'Listopad', 'Grudzień'];
+	$mdDateLocaleProvider.shortMonths = ['sty', 'lut', 'mar', 'kwie',
+		'maj', 'cze', 'lip', 'sie', 'wrz', 'paź', 'lis', 'gru'];
+	$mdDateLocaleProvider.days = ['niedziela', 'poniedziałek', 'wtorek', 'środa',
+		'czwartek', 'piątek', 'sobota'];
+	$mdDateLocaleProvider.shortDays = ['ndz', 'pon', 'wt', 'śr', 'czw', 'pt', 'sob'];
+	$mdDateLocaleProvider.firstDayOfWeek = 1;
+	$mdDateLocaleProvider.msgCalendar = 'Kalendarz';
+	$mdDateLocaleProvider.msgOpenCalendar = 'Otwórz kalendarz';
 	$mdDateLocaleProvider.formatDate = function(date) {
 		moment.locale('pl');
-    var m = moment(date);
-		moment.tz.add('Europe/Warsaw|CET|-10|1o00|17e5');
-		moment.tz.link("Europe/Warsaw");
-    return m.isValid() ? m.tz('Europe/Warsaw').format('ll') : '';
-  };
+		var m = moment(date);
+		return m.isValid() ? m.format('ll') : '';
+	};
 });

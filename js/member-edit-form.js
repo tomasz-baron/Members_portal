@@ -1,4 +1,4 @@
-function memberEditController($scope, $rootScope, $stateParams, $state, informService, membersService) {
+function memberEditController($scope, $rootScope, $stateParams, $state, informService, membersService, MEMBER_TYPES) {
 	$scope.member = $stateParams.member;
 	$scope.mentors = null;
 	if ($scope.member) {
@@ -12,12 +12,7 @@ function memberEditController($scope, $rootScope, $stateParams, $state, informSe
 	var privateEmailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 	var cardNumberRegex = new RegExp('[a-z0-9]{6}-[a-z0-9]{6}', 'i');
 
-	$scope.types = [
-	{id: 'C', name: 'Członek zwyczajny'},
-	{id: 'Z', name: 'Zarząd'},
-	{id: 'R', name: "Komisja Rewizyjna"},
-	{id: 'K', name: 'Koordynator grupy roboczej'},
-	{id: 'H', name: 'Członek honorowy'}];
+	$scope.memberTypes = MEMBER_TYPES;
 
 	var validate = function(form) {
 		if (form.$invalid) {
