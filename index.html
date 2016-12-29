@@ -8,40 +8,19 @@
 	<script src="libs/angular-aria/angular-aria.min.js"></script>
 	<script src="libs/angular-messages/angular-messages.min.js"></script>
 	<script src="libs/angular-material/angular-material.min.js"></script>
-	<script src="js/libs/ui-bootstrap-tpls.min.js"></script>
 	<script src="libs/moment/min/moment-with-locales.min.js"></script>
 	<script src="libs/moment-timezone/builds/moment-timezone.min.js"></script>
 	<script src="libs/hammerjs/hammer.min.js"></script>
-	<script src="js/libs/angular.hammer.min.js"></script>
-	<script src="js/main.js"></script>
-	<script src="js/empty.js"></script>
-	<script src="js/title-toolbar.js"></script>
-	<script src="js/members-table.js"></script>
-	<script src="js/membersList.js"></script>
-	<script src="js/oldMembersList.js"></script>
-	<script src="js/memberDetails.js"></script>
-	<script src="js/memberEdit.js"></script>
-	<script src="js/member-edit-form.js"></script>
-	<script src="js/paymentNew.js"></script>
-	<script src="js/payments-table.js"></script>
-	<script src="js/usersList.js"></script>
-	<script src="js/userEdit.js"></script>
-	<script src="js/userProfile.js"></script>
-	<script src="js/users-card.js"></script>
-	<script src="js/reports.js"></script>
-	<script src="js/statistics.js"></script>
-	<script src="js/paymentBatch.js"></script>
-	<script src="js/services/login-services.js"></script>
-	<script src="js/services/inform-services.js"></script>
-	<script src="js/services/members-services.js"></script>
-	<script src="js/services/users-services.js"></script>
-	<script src="js/services/paymentItems.js"></script>
+	<!-- inject:js -->
+	<!-- endinject -->
+	
 	<title>Portal członków AEGEE-Gliwice</title>
+	<!-- inject:css -->
+	<!-- endinject -->
 	<link href='https://fonts.googleapis.com/css?family=Lato:400,400italic,700' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="css/angular-material.min.css">
+	
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<link rel="stylesheet" href="css/bootstrap.min.css">
-	<link rel="stylesheet" href="css/main.css">
+	
 	<link rel="icon" href="favicon.ico">
 </head>
 <body class="body" ng-controller="navigationCtrl as nav">
@@ -81,6 +60,12 @@
 					<li>
 						<md-button ui-sref="statistics" ng-class="{active: isActive('/statistics')}">
 							Statystyki
+						</md-button>
+					</li>
+
+					<li>
+						<md-button ui-sref="changes" ng-class="{active: isActive('/changes')}">
+							Lista zmian
 						</md-button>
 					</li>
 

@@ -1,2 +1,4 @@
 php/db.php
 libs
+build
+node_modules
