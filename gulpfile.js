@@ -91,5 +91,5 @@ gulp.task('default', ['serve'], function() {
 	gulp.watch(['./css/**/*.scss'], ['sass', 'index']);
 	gulp.watch(['./include/*.html'], ['resource', 'index', 'login']);
 	gulp.watch(['./js/login/**/*.js', './js/app/**/*.js', './js/shared/**/*.js', './js/libs/**/*.js'], ['scripts', 'index', 'login']);
-    gulp.watch(['./libs'], ['libs', 'css', 'index', 'login']);
+    gulp.watch(['./js/libs'], ['libs', 'css', 'index', 'login']);
 });
