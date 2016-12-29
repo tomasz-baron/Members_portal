@@ -21,7 +21,10 @@
     "gulp": "^3.9.1",
     "gulp-connect": "^5.0.0",
     "gulp-inject": "^4.2.0",
-    "gulp-less": "^3.3.0",
-    "gulp-watch": "^4.3.11"
+    "gulp-minify": "0.0.14",
+    "gulp-run-sequence": "^0.3.2",
+    "gulp-sass": "^3.0.0",
+    "gulp-watch": "^4.3.11",
+    "main-bower-files": "^2.13.1"
   }
 }
