@@ -4,9 +4,8 @@ var connect = require('gulp-connect'),
 	gulp = require('gulp'),
 	watch = require('gulp-watch'),
 	inject = require('gulp-inject'),
-	minify = require('gulp-minify'),
 	runSequence = require('gulp-run-sequence'),
-	bowerFiles = require('main-bower-files');
+	concat = require('gulp-concat');
 
 gulp.task('connect', function() {
 	connect.server({
@@ -17,18 +16,16 @@ gulp.task('connect', function() {
 });
 
 gulp.task('index', function () {
-  return gulp.src('index.html')
-  .pipe(inject(gulp.src(bowerFiles('**/*.min.js'), {read: false}), {name: 'libs'}))
-  //.pipe(inject(gulp.src('./build/js/libs/**/*.js', {read: false}), {addRootSlash: false, ignorePath: 'build', name: 'libs'}))
-  .pipe(inject(gulp.src(['./js/shared/**/*.js', './js/app/**/*.js', './build/css/**/*.css', './libs/angular-material/angular-material.min.css'], {read: false}), {addRootSlash: false, ignorePath: 'build'}))
-  .pipe(gulp.dest('./build/'));
+	return gulp.src('index.html')
+		.pipe(inject(gulp.src(['./build/js/vendor.js']), {addRootSlash: false, ignorePath: 'build', name: 'libs'}))
+		.pipe(inject(gulp.src(['./build/js/app.js', './build/css/**/*.css'], {read: false}), {addRootSlash: false, ignorePath: 'build'}))
+		.pipe(gulp.dest('./build/'));
 });
 
 gulp.task('login', function () {
   return gulp.src('login.html')
-  .pipe(inject(gulp.src(bowerFiles(), {read: false}), {name: 'libs'}))
-  //.pipe(inject(gulp.src('./build/js/libs/**/*.js', {read: false}), {addRootSlash: false, ignorePath: 'build', name: 'libs'}))
-  .pipe(inject(gulp.src(['./js/login/**/*.js', './js/shared/**/*.js', './build/css/**/*.css', './libs/angular-material/angular-material.min.css'], {read: false}), {addRootSlash: false, ignorePath: 'build'}))
+  .pipe(inject(gulp.src(['./build/js/vendor.js']), {addRootSlash: false, ignorePath: 'build', name: 'libs'}))
+  .pipe(inject(gulp.src(['./build/js/login.js', './build/css/**/*.css'], {read: false}), {addRootSlash: false, ignorePath: 'build'}))
   .pipe(gulp.dest('./build/'));
 });
 
@@ -38,7 +35,7 @@ gulp.task('resource', function() {
 			'!**/*.ts', '!**/*.scss', '!bower.json', 
 			'!build', '!build/**',
 			'!db', '!db/**',
-			'!libs', '!libs/**',
+			'!js', '!js/**',
 			'!node_modules', '!node_modules/**', 
 			'!gulpfile.js', '!package.json', '!.git', '!.bowerrc', '!.gitignore'])
 		.pipe(gulp.dest('./build/'));
@@ -46,16 +43,33 @@ gulp.task('resource', function() {
 
 gulp.task('libs', function() {
 	return gulp
-		.src(['libs/**/*.min.js', 
-			'!libs/angular-material/modules', '!libs/angular-material/modules/**',
-			'!libs/moment/min/locales.min.js', '!libs/moment/min/moment.min.js*',
+		.src(['js/libs/**/*.min.js', 
+			'!js/libs/angular-material/modules', '!js/libs/angular-material/modules/**',
+			'!js/libs/moment/min/locales.min.js', '!js/libs/moment/min/moment.min.js*',
 			'!libs/moment-timezone/builds/moment-timezone-*'])
-		.pipe(gulp.dest('./build/js/libs'));
+		.pipe(concat('vendor.js'))
+		.pipe(gulp.dest('./build/js'));
 });
+
+gulp.task('vendor-index', function() {
+	return gulp
+		.src(['js/app/**/*.js', 'js/shared/**/*.js'])
+		.pipe(concat('app.js'))
+		.pipe(gulp.dest('./build/js'));
+});
+
+gulp.task('vendor-login', function() {
+	return gulp
+		.src(['js/login/**/*.js', 'js/shared/**/*.js'])
+		.pipe(concat('login.js'))
+		.pipe(gulp.dest('./build/js'));
+});
+
+gulp.task('scripts', ['libs', 'vendor-index', 'vendor-login']);
 
 gulp.task('css', function() {
 	return gulp
-		.src(['libs/angular-material/angular-material.min.css'])
+		.src(['js/libs/angular-material/angular-material.min.css'])
 		.pipe(gulp.dest('./build/css'));
 });
 
@@ -69,26 +83,13 @@ gulp.task('sass', function() {
 		.pipe(gulp.dest('./build/css/'));
 });
 
-gulp.task('compress', function() {
-  gulp.src('./js/**/*.js')
-    .pipe(minify({
-        ext:{
-			src:'-debug.js',
-            min:'.min.js'
-        },
-        exclude: ['tasks'],
-        ignoreFiles: ['*.combo.js', '*.min.js']
-    }))
-    .pipe(gulp.dest('package'))
-});
-
 gulp.task('serve', function() {
-  runSequence('resource', 'css', 'sass', 'index', 'login', 'connect');
+  runSequence('resource', 'scripts', 'css', 'sass', 'index', 'login', 'connect');
 });
 
 gulp.task('default', ['serve'], function() {
 	gulp.watch(['./css/**/*.scss'], ['sass', 'index']);
 	gulp.watch(['./include/*.html'], ['resource', 'index', 'login']);
-	gulp.watch(['./js/login/**/*.js', './js/app/**/*.js', './js/shared/**/*.js', './js/libs/**/*.js'], ['resource', 'index', 'login']);
+	gulp.watch(['./js/login/**/*.js', './js/app/**/*.js', './js/shared/**/*.js', './js/libs/**/*.js'], ['scripts', 'index', 'login']);
     gulp.watch(['./libs'], ['libs', 'css', 'index', 'login']);
 });
