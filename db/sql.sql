@@ -42,9 +42,7 @@ ALTER TABLE `logs`
   ADD KEY `logs_ibfk_1` (`memberId`),
   ADD KEY `logs_ibfk_2` (`memberUserId`);
 ALTER TABLE `logs`
-  ADD CONSTRAINT `logs_ibfk_1` FOREIGN KEY (`memberId`) REFERENCES `members` (`id`);
-ALTER TABLE `logs`
-  ADD CONSTRAINT `logs_ibfk_2` FOREIGN KEY (`memberUserId`) REFERENCES `users` (`id`);  
+  ADD CONSTRAINT `logs_ibfk_1` FOREIGN KEY (`memberId`) REFERENCES `members` (`id`); 
 ALTER TABLE `logs` CHANGE `id` `id` INT(10) NOT NULL AUTO_INCREMENT COMMENT 'id loginu';
 
 // 26-12-2016
@@ -52,3 +50,7 @@ ALTER TABLE `members` CHANGE `type` `type` VARCHAR(1) CHARACTER SET utf8 COLLATE
 UPDATE `members` SET type='C' WHERE type='K';
 UPDATE `members` SET type='K' WHERE type='R';
 ALTER TABLE `members` DROP `connectedToList`;
+
+//30-12-2016
+ALTER TABLE `logs`
+  ADD CONSTRAINT `logs_ibfk_2` FOREIGN KEY (`memberUserId`) REFERENCES `members` (`id`);  

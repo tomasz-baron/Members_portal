@@ -1,25 +1,32 @@
 var app=angular.module('main', ['ui.router', 'ui.bootstrap', 'ngMaterial', 'login.loginFactory',
-	'main.inform', 'main.membersFactory', 'main.usersFactory', 'main.paymentItems', 'hmTouchEvents']);
+	'main.inform', 'main.membersFactory', 'main.usersFactory', 'main.paymentItems', 'main.changeItems', 'hmTouchEvents']);
 
 app
-.constant("PAYMENT_TYPES", {
+.constant('PAYMENT_TYPES', {
     1: 'Semestr 1',
     2: 'Semestr 2',
     3: 'Rok'
 })
-.constant("PAYMENT_AMOUNTS", {
+.constant('PAYMENT_AMOUNTS', {
     20: '20,00 zł',
     40: '40,00 zł'
 })
-.constant("BOOLEAN", {
+.constant('BOOLEAN', {
 	0: 'Nie',
 	1: 'Tak'
 })
-.constant("MEMBER_TYPES", {
+.constant('MEMBER_TYPES', {
 	C: 'Członek zwyczajny',
 	Z: 'Zarząd',
 	K: 'Komisja Rewizyjna',
 	H: 'Członek honorowy'
+})
+.constant('CHANGE_TYPES', {
+	1: 'Dodanie nowego członka', 
+	2: 'Dodanie nowej składki',
+	3: 'Utworzenie nowego użytkownika',
+	4: 'Przeniesienie na listę byłych członków',
+	5: 'Przywrócenie członka z listy byłych członków'
 })
 .controller('navigationCtrl', ['$scope', '$rootScope', '$http', '$timeout',
 	'$location', '$mdSidenav', '$window', 'loginService', 'informService', '$interval',
@@ -201,6 +208,13 @@ app.config(function($stateProvider, $urlRouterProvider) {
 		url: '/statistics',
 		views: {
 			'contentView': { templateUrl: 'include/statistics.html' },
+			'rightView': { templateUrl: 'include/empty.html' }
+		}
+	})
+	.state('changesList', {
+		url: '/changesList',
+		views: {
+			'contentView': { templateUrl: 'include/changesList.html' },
 			'rightView': { templateUrl: 'include/empty.html' }
 		}
 	})

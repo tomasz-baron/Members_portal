@@ -41,6 +41,12 @@ gulp.task('resource', function() {
 		.pipe(gulp.dest('./build/'));
 });
 
+gulp.task('api', function() {
+	return gulp
+		.src(['./php/**/*'])
+		.pipe(gulp.dest('./build/php'));
+});
+
 gulp.task('libs', function() {
 	return gulp
 		.src(['js/libs/**/*.min.js', 
@@ -92,4 +98,5 @@ gulp.task('default', ['serve'], function() {
 	gulp.watch(['./include/*.html'], ['resource', 'index', 'login']);
 	gulp.watch(['./js/login/**/*.js', './js/app/**/*.js', './js/shared/**/*.js', './js/libs/**/*.js'], ['scripts', 'index', 'login']);
     gulp.watch(['./js/libs'], ['libs', 'css', 'index', 'login']);
+	gulp.watch(['./php/api.php'], ['api']);
 });

@@ -1,0 +1,5 @@
+<title-toolbar title="Lista zmian z ostatnich 30 dni" toggle-left="toggleLeft()" user-info="userInfo" logout="logout()"></title-toolbar>
+<div class="changes-list-container md-whiteframe-z1" ng-controller="changesListCtrl">
+    <changes-table list="value" type ="key" ng-repeat="(key, value) in items"></changes-table>
+
+</div>

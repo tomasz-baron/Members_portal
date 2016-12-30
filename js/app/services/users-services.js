@@ -78,5 +78,16 @@ angular.module('main.usersFactory', [])
 		});
 	};
 
+	usersService.getChangesList = function() {
+		return $http({
+			method: 'post',
+			url: 'getChangesList',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID')
+			}
+		});
+	};
+
 	return usersService;
 }]);

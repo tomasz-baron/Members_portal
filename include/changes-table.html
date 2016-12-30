@@ -1,0 +1,20 @@
+<md-toolbar class="md-theme-light changes-title">
+	<h1 class="md-toolbar-tools">{{::changeTypes[type]}}</h1>
+</md-toolbar>
+
+<table class="table table-condensed changes-table">
+	<thead>
+        <th>#</th>
+		<th>Data</th>
+		<th>Zmiana dla członka</th>
+		<th>Autor zmiany</th>
+	</thead>
+	<tbody>
+		<tr ng-repeat="item in list">
+			<th class="index-row">{{$index + 1}}</th>
+			<td class="content-row">{{::item.ldate}}</td>
+			<td class="content-row">{{::item.member}}</td>
+			<td class="content-row">{{::item.user}}</td>
+		</tr>
+	</tbody>
+</table>
