@@ -1,19 +1,32 @@
 var app=angular.module('main', ['ui.router', 'ui.bootstrap', 'ngMaterial', 'login.loginFactory',
-	'main.inform', 'main.membersFactory', 'main.usersFactory', 'main.paymentItems', 'hmTouchEvents']);
+	'main.inform', 'main.membersFactory', 'main.usersFactory', 'main.paymentItems', 'main.changeItems', 'hmTouchEvents']);
 
 app
-.constant("PAYMENT_TYPES", {
+.constant('PAYMENT_TYPES', {
     1: 'Semestr 1',
     2: 'Semestr 2',
     3: 'Rok'
 })
-.constant("PAYMENT_AMOUNTS", {
+.constant('PAYMENT_AMOUNTS', {
     20: '20,00 zł',
     40: '40,00 zł'
 })
-.constant("BOOLEAN", {
+.constant('BOOLEAN', {
 	0: 'Nie',
 	1: 'Tak'
+})
+.constant('MEMBER_TYPES', {
+	C: 'Członek zwyczajny',
+	Z: 'Zarząd',
+	K: 'Komisja Rewizyjna',
+	H: 'Członek honorowy'
+})
+.constant('CHANGE_TYPES', {
+	1: 'Dodanie nowego członka', 
+	2: 'Dodanie nowej składki',
+	3: 'Utworzenie nowego użytkownika',
+	4: 'Przeniesienie na listę byłych członków',
+	5: 'Przywrócenie członka z listy byłych członków'
 })
 .controller('navigationCtrl', ['$scope', '$rootScope', '$http', '$timeout',
 	'$location', '$mdSidenav', '$window', 'loginService', 'informService', '$interval',
@@ -198,6 +211,13 @@ app.config(function($stateProvider, $urlRouterProvider) {
 			'rightView': { templateUrl: 'include/empty.html' }
 		}
 	})
+	.state('changesList', {
+		url: '/changesList',
+		views: {
+			'contentView': { templateUrl: 'include/changesList.html' },
+			'rightView': { templateUrl: 'include/empty.html' }
+		}
+	})
 	.state('usersList', {
 		url: '/usersList',
 		views: {
@@ -216,22 +236,19 @@ app.config(function($stateProvider, $urlRouterProvider) {
 
 app.config(function($mdDateLocaleProvider) {
 	$mdDateLocaleProvider.months = ['Styczeń', 'Luty', 'Marzec', 'Kwiecień',
-	'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik',
-	'Listopad', 'Grudzień'];
-	$mdDateLocaleProvider.shortMonths = ['Styczeń', 'Luty', 'Marzec', 'Kwiecień',
-	'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik',
-	'Listopad', 'Grudzień'];
-  $mdDateLocaleProvider.days = ['niedziela', 'poniedziałek', 'wtorek', 'środa',
-  	'czwartek', 'piątek', 'sobota'];
-  $mdDateLocaleProvider.shortDays = ['niedz', 'pon', 'wt', 'śr', 'czw', 'pt', 'sob'];
-  $mdDateLocaleProvider.firstDayOfWeek = 1;
-  $mdDateLocaleProvider.msgCalendar = 'Kalendarz';
-  $mdDateLocaleProvider.msgOpenCalendar = 'Otwórz kalendarz';
+		'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik',
+		'Listopad', 'Grudzień'];
+	$mdDateLocaleProvider.shortMonths = ['sty', 'lut', 'mar', 'kwie',
+		'maj', 'cze', 'lip', 'sie', 'wrz', 'paź', 'lis', 'gru'];
+	$mdDateLocaleProvider.days = ['niedziela', 'poniedziałek', 'wtorek', 'środa',
+		'czwartek', 'piątek', 'sobota'];
+	$mdDateLocaleProvider.shortDays = ['ndz', 'pon', 'wt', 'śr', 'czw', 'pt', 'sob'];
+	$mdDateLocaleProvider.firstDayOfWeek = 1;
+	$mdDateLocaleProvider.msgCalendar = 'Kalendarz';
+	$mdDateLocaleProvider.msgOpenCalendar = 'Otwórz kalendarz';
 	$mdDateLocaleProvider.formatDate = function(date) {
 		moment.locale('pl');
-    var m = moment(date);
-		moment.tz.add('Europe/Warsaw|CET|-10|1o00|17e5');
-		moment.tz.link("Europe/Warsaw");
-    return m.isValid() ? m.tz('Europe/Warsaw').format('ll') : '';
-  };
+		var m = moment(date);
+		return m.isValid() ? m.format('ll') : '';
+	};
 });

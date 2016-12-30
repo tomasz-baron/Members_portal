@@ -37,16 +37,20 @@ CREATE TABLE `logs` (
   `ldate` datetime NOT NULL COMMENT 'data dokonania zmian',
   `type` int(2) NOT NULL COMMENT 'typ zmiany 1 - dodanie czlonka, 2 - dodanie składki, 3 - utworzenie uzytkownika, 4 - przeniesienie do bylych czlonkow, 5 - przywrocenie czlonka'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci COMMENT='Logi aplikacji';
-
 ALTER TABLE `logs`
   ADD PRIMARY KEY (`id`),
   ADD KEY `logs_ibfk_1` (`memberId`),
   ADD KEY `logs_ibfk_2` (`memberUserId`);
-
 ALTER TABLE `logs`
-  ADD CONSTRAINT `logs_ibfk_1` FOREIGN KEY (`memberId`) REFERENCES `members` (`id`);
-
-ALTER TABLE `logs`
-  ADD CONSTRAINT `logs_ibfk_2` FOREIGN KEY (`memberUserId`) REFERENCES `users` (`id`);  
-
+  ADD CONSTRAINT `logs_ibfk_1` FOREIGN KEY (`memberId`) REFERENCES `members` (`id`); 
 ALTER TABLE `logs` CHANGE `id` `id` INT(10) NOT NULL AUTO_INCREMENT COMMENT 'id loginu';
+
+// 26-12-2016
+ALTER TABLE `members` CHANGE `type` `type` VARCHAR(1) CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL DEFAULT 'C' COMMENT 'Z - członek zarządu, K - komisja rewizyjna, H - członek honorowy, C - członek zwyczajny';
+UPDATE `members` SET type='C' WHERE type='K';
+UPDATE `members` SET type='K' WHERE type='R';
+ALTER TABLE `members` DROP `connectedToList`;
+
+//30-12-2016
+ALTER TABLE `logs`
+  ADD CONSTRAINT `logs_ibfk_2` FOREIGN KEY (`memberUserId`) REFERENCES `members` (`id`);  

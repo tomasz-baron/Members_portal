@@ -811,6 +811,36 @@ function getStatistics() {
 	}
 }
 
+
+function getChangesList() {
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	date_default_timezone_set('UTC');
+	$cdate = date("Y-m-d", strtotime("-30 days"));
+	if ($this->isLogged($request)) {
+		$sql = "SELECT l.id, 
+					CONCAT(m.firstName, ' ', m.lastName) AS 'member', 
+					CONCAT(m2.firstName, ' ', m2.lastName) AS 'user',
+					l.ldate, 
+					l.type
+			FROM logs l 
+				JOIN members m ON l.memberId = m.id
+				JOIN members m2 ON l.memberUserId = m2.id
+			WHERE l.ldate >= STR_TO_DATE('$cdate', '%Y-%m-%d')
+			ORDER BY l.type";
+		$result = $this->mysqli->query($sql);
+		if (mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$toReturn[] = array('id' => $row["id"], 'member' => $row["member"], 'user' => $row["user"], 
+					'ldate' => $row["ldate"], 'type' => $row["type"]);
+			}
+			$this->response($this->json($toReturn), 200);
+		} else {
+			$this->response('', 204);
+		}
+	}
+}
+
 function moveToOld() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
@@ -824,7 +854,7 @@ function moveToOld() {
 				$sql = "SELECT u.memberId FROM users u WHERE username = '$username'";
 				$result = $this->mysqli->query($sql);
 				$row = mysqli_fetch_array($result);
-				$memberUserId = $row["memberId"];
+				$memberUserId = $row["memberId"];	
 				$today = date('Y-m-d H:i:s');
 				$sql = "INSERT INTO logs (memberId, memberUserId, ldate, type)
 				VALUES ($memberId, $memberUserId, '".$today."', 4)";

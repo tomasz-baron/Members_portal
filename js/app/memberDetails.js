@@ -1,20 +1,15 @@
-app.controller('memberDetailsCtrl', ['$scope', '$rootScope', '$state', '$stateParams', '$location', 'informService', 'membersService',
-	function ($scope, $rootScope, $state, $stateParams, $location, informService, membersService) {
+app.controller('memberDetailsCtrl', ['$scope', '$rootScope', '$state', '$stateParams', '$location', 'informService', 'membersService', 'BOOLEAN', 'MEMBER_TYPES',
+	function ($scope, $rootScope, $state, $stateParams, $location, informService, membersService, BOOLEAN, MEMBER_TYPES) {
 
 		$scope.member = null;
 		$scope.memberId = $stateParams.id;
 		$scope.userRole = localStorage.getItem('UserRole');
+		$scope.boolean = BOOLEAN;
+		$scope.memberTypes = MEMBER_TYPES;
 
 		if (!$scope.memberId) {
 			$state.go('membersList');
 		}
-
-		$scope.types = [
-		{id: 'C', name: 'Członek zwyczajny'},
-		{id: 'Z', name: 'Zarząd'},
-		{id: 'R', name: "Komisja Rewizyjna"},
-		{id: 'K', name: 'Koordynator grupy roboczej'},
-		{id: 'H', name: 'Członek honorowy'}];
 
 		var getMembersDetails = function() {
 			membersService.getMemberDetails($scope.memberId)

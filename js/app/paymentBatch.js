@@ -6,10 +6,10 @@ app.controller('paymentBatchCtrl',['$scope', '$mdDialog', '$rootScope', 'members
     $scope.items = paymentItems.get();
     $scope.paymentTypes = PAYMENT_TYPES;
     $scope.paymentAmounts = PAYMENT_AMOUNTS;
-
-		angular.forEach($scope.items, function(value, key) {
-      value.paymentDate = new Date();
-			value.expirationDate = new Date();
+	
+	angular.forEach($scope.items, function(value, key) {
+		value.paymentDate = new Date();
+		value.expirationDate = new Date();
     });
 
     $scope.cancel = function() {

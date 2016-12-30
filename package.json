@@ -1,0 +1,29 @@
+{
+  "name": "membersportal",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tomasz-baron/Members_portal.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tomasz-baron/Members_portal/issues"
+  },
+  "homepage": "https://github.com/tomasz-baron/Members_portal#readme",
+  "dependencies": {
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-connect": "^5.0.0",
+    "gulp-inject": "^4.2.0",
+    "gulp-run-sequence": "^0.3.2",
+    "gulp-sass": "^3.0.0",
+    "gulp-watch": "^4.3.11"
+  }
+}
