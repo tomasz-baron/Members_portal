@@ -23,9 +23,14 @@ angular.module('main.changeItems', [])
         return items;
     };
 
+    var clear = function() {
+        items = {};
+    };
+
 	return {
             addAll: addAll,
             get: get,
-            getAll: getAll
+            getAll: getAll,
+            clear: clear
         };
 });

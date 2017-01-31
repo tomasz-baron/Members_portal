@@ -5,6 +5,7 @@ app.controller('changesListCtrl', ['$scope', '$rootScope', 'usersService', 'info
         var getChangesList = function() {
             usersService.getChangesList()
 			.success(function (data) {
+				changeItems.clear();
                 changeItems.addAll(data);
                 $scope.items = changeItems.getAll();
 			})
